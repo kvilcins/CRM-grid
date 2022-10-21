@@ -1,0 +1,110 @@
+.fieldset__label {
+  display: flex;
+  gap: 5px 0;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+
+.fieldset__input {
+  border: none;
+  background-color: #F4F2FF;
+  height: 40px;
+  width: 100%;
+  border-radius: 6px;
+  color: #6E6893;
+  padding: 7px;
+  font-size: 14px;
+}
+.fieldset__textarea {
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  background-color: #F4F2FF;
+  resize: none;
+  color: #6E6893;
+  padding: 7px;
+  font-size: 14px;
+  height: 112px;
+}
+
+.fieldset__span {
+  padding: 0 0 0 10px;
+}
+
+.fieldset__inner-fieldset_row {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+}
+
+.fieldset__inner-fieldset_no-border {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fieldset__inner-fieldset_width {
+  width: 100%;
+}
+
+.fieldset__grid-category {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.fieldset__grid-measuring {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+
+.fieldset__inner-fieldset {
+  grid-column: 1 / 2;
+  grid-row: 4 / 5;
+}
+
+.fieldset__grid-description {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+}
+
+.fieldset__grid-amount {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+}
+
+.fieldset__grid-price {
+  grid-column: 2 / 3;
+  grid-row: 4 / 5;
+}
+
+.fieldset__input-file {
+  opacity: 0;
+  z-index: -1;
+  position: absolute;
+}
+
+.fieldset__grid-file {
+  grid-column: 2 / 3;
+  grid-row: 5 / 6;
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  background-color: #6D5BD0;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  text-transform: uppercase;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+}

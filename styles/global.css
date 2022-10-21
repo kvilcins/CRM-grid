@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+html {
+  box-sizing: border-box;
+  position: relative;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #6E6893;
+  text-transform: uppercase;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.overlay {
+  padding: 32px 105px;
+  margin: auto;
+  max-width: 792px;
+  background-color: #F2F0F9;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+}

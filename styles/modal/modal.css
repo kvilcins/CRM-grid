@@ -1,0 +1,21 @@
+.modal {
+  max-width: 580px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.modal__title {
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.1em;
+  margin: 0 0 43px;
+}
+
+.modal__close {
+  cursor: pointer;
+  position: absolute;
+  right: -80px;
+  top: -19px;
+  font-size: 31px;
+  display: inline-block;
+}
