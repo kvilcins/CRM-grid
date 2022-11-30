@@ -1,0 +1,12 @@
+.forward-icon {
+  cursor: pointer;
+}
+
+.forward-icon__path {
+  color: var(--placeholder, #6E6893);
+  transition: color 0.4s ease;
+}
+
+.forward-icon:hover .forward-icon__path {
+  color: var(--dark-blue, #373346);
+}

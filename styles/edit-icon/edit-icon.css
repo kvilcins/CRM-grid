@@ -1,0 +1,4 @@
+.edit-icon__path {
+  stroke: var(--placeholder, #6E6893);
+  transition: stroke 0.4s ease;
+}

@@ -15,7 +15,7 @@
 }
 
 .inner-fieldset__input {
-  color: #6E6893;
+  color: var(--placeholder, #6E6893);
   padding: 7px;
   font-size: 14px;
 }
@@ -32,7 +32,7 @@
   display: block;
   width: 40px;
   height: 40px;
-  background-color: #F4F2FF;
+  background-color: var(--white-hover, #F4F2FF);
   border-radius: 6px;
 }
 
@@ -67,5 +67,5 @@
 }
 
 .inner-fieldset__input_active {
-  background-color: #E5E5E5;
+  background-color: var(--light-grey, #E5E5E5);
 }

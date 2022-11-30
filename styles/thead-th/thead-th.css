@@ -1,0 +1,44 @@
+.thead-th:first-child {
+  padding: 0 8px 0 15px;
+}
+
+.thead-th {
+  padding: 0 8px 0 8px;
+}
+
+.thead-th_center {
+  text-align: center;
+}
+
+.thead-th_right {
+  text-align: right;
+}
+
+.head-th_id-width {
+  width: 78px;
+}
+
+.head-th_name-width {
+  width: 300px;
+}
+
+.head-th_cat-width {
+  width: 160px;
+}
+
+.head-th_measurement-width {
+  width: 80px;
+}
+
+.head-th_amount-width {
+  width: 91px;
+}
+
+.head-th_price-width {
+  width: 110px;
+}
+
+.head-th_total-width {
+  width: 110px;
+  padding: 0 34px 0 8px;
+}

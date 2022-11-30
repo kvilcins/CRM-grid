@@ -14,22 +14,17 @@ html {
 body {
   font-family: 'Inter', sans-serif;
   color: #6E6893;
-  text-transform: uppercase;
+  background-color: #F4F2FF;
 }
 
 textarea:focus, input:focus{
   outline: none;
 }
 
-.container {
-  display: flex;
-  height: 100vh;
+h1 {
+  margin: 0;
 }
 
-.overlay {
-  padding: 32px 105px;
-  margin: auto;
-  max-width: 792px;
-  background-color: #F2F0F9;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+p {
+  margin: 0;
 }

@@ -17,7 +17,7 @@
 }
 
 .total__span {
-  color: #6D5BD0;
+  color: var(--cold-purple, #6D5BD0);
   font-weight: 700;
   font-size: 18px;
   line-height: 22px;
@@ -27,12 +27,58 @@
   border: none;
   width: 200px;
   height: 39px;
-  background-color: #6D5BD0;
+  background-color: var(--cold-purple, #6D5BD0);
   border-radius: 6px;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--white, #FFFFFF);
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
   cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+
+.total__button:hover {
+  background-color: var(--button-hover, #594bad);
+}
+
+.total__button:focus {
+  background-color: var(--button-hover, #594bad);
+  border: 1px solid var(--light-pink, #C6C2DE);
+}
+
+.total__button:active {
+  background-color: var(--button-active, #44357e);
+}
+
+@media screen and (max-width: 820px) {
+  .total__span {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .total__button {
+    font-size: 12px;
+  }
+
+  .total {
+    max-width: 100%;
+  }
+
+  .total__span {
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .total {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .total__price {
+    text-align: center;
+  }
 }

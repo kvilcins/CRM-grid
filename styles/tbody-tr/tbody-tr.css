@@ -1,0 +1,11 @@
+.tbody-tr {
+  height: 60px;
+  border-bottom: 1px solid var(--light-blue, #D9D5EC);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--table-black, #25213B);
+}
+
+.tbody-tr:last-child {
+  border-bottom: none;
+}

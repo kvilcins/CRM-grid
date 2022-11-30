@@ -1,0 +1,19 @@
+:root {
+  --overlay: 0 0 6px rgba(0, 0, 0, 0.25);
+  --powder: #F2F0F9;
+  --light-pink: #C6C2DE;
+  --cold-purple: #6D5BD0;
+  --crm-border: 0 0 5px rgba(0, 0, 0, 0.2);
+  --white: #FFFFFF;
+  --light-blue: #D9D5EC;
+  --white-hover: #F4F2FF;
+  --grey-focus: #e3e2f5;
+  --grey-active: #e0dfec;
+  --placeholder: #6E6893;
+  --button-blue: #6D5BD0;
+  --button-hover: #594bad;
+  --button-active: #44357e;
+  --table-black: #25213B;
+  --dark-blue: #373346;
+  --light-grey: #E5E5E5;
+}

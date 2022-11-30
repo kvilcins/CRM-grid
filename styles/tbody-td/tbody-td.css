@@ -1,0 +1,85 @@
+.tbody-td:first-child {
+  padding: 0 8px 0 15px;
+}
+
+.tbody-td:last-child {
+  padding: 0 15px 0 8px;
+}
+
+.tbody-td {
+  padding: 0 10px 0 10px;
+}
+
+.tbody-td_center {
+  text-align: center;
+}
+
+.tbody-td_right {
+  text-align: right;
+}
+
+.tbody-td_padding {
+  padding: 0 34px 0 8px;
+}
+
+.tbody-td_color {
+  color: var(--placeholder, #6E6893);
+}
+
+.tbody-td_image {
+  height: 60px;
+  cursor: pointer;
+  text-align: center;
+  width: 20px;
+}
+
+.tbody-td__button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.tfoot-td__button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.tbody-td__button:hover .image-icon__path {
+  color: var(--dark-blue, #373346);
+}
+
+.tbody-td_noimage {
+  height: 60px;
+  cursor: pointer;
+  text-align: center;
+  width: 20px;
+}
+
+.tbody-td_noimage:hover .noimage-icon__path {
+  color: var(--dark-blue, #373346);
+}
+
+.tbody-td_edit {
+  height: 60px;
+  cursor: pointer;
+  text-align: center;
+  width: 20px;
+}
+
+.tbody-td_edit:hover .edit-icon__path {
+  stroke: var(--dark-blue, #373346);
+}
+
+.tbody-td_delete {
+  height: 60px;
+  text-align: center;
+  cursor: pointer;
+  width: 20px;
+}
+
+.tbody-td_delete:hover .delete-icon__path {
+  color: var(--dark-blue, #373346);
+}

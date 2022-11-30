@@ -1,0 +1,8 @@
+.arrow-svg__path {
+  color: var(--placeholder, #6E6893);
+  transition: color 0.4s ease;
+}
+
+.arrow-svg__path:hover {
+  color: var(--dark-blue, #373346);
+}

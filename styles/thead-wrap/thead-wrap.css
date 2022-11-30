@@ -1,0 +1,9 @@
+.thead-wrap {
+  background-color: var(--white-hover, #F4F2FF);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  height: 45px;
+  border-bottom: 1px solid var(--light-blue, #D9D5EC);
+}

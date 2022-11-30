@@ -1,0 +1,29 @@
+.tfoot-td_align {
+  text-align: right;
+}
+
+.tfoot-td__text {
+  display: inline-block;
+}
+
+.tfoot-td__svg {
+  display: inline-block;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.tfoot-td:first-child {
+  padding: 0 8px 0 15px;
+}
+
+.tfoot-td:last-child {
+  padding: 0 15px 0 8px;
+}
+
+.tfoot-td {
+  padding: 0 8px 0 8px;
+}
+
+.tfoot-td_center {
+  text-align: center;
+}

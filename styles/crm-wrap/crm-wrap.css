@@ -1,0 +1,10 @@
+.crm-wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 80px 20px 110px 20px;
+}
+
+.crm-wrap__border {
+  box-shadow: var(--crm-border, 0 0 5px rgba(0, 0, 0, 0.2));
+  border-radius: 8px;
+}

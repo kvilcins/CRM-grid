@@ -2,13 +2,16 @@
   max-width: 580px;
   margin: 0 auto;
   position: relative;
+  text-transform: uppercase;
 }
 
 .modal__title {
   font-weight: 700;
   font-size: 24px;
   letter-spacing: 0.1em;
-  margin: 0 0 43px;
+  margin: 0 0 21px;
+  border-bottom: 1px solid var(--light-pink, #C6C2DE);
+  height: 53px;
 }
 
 .modal__close {
@@ -18,4 +21,34 @@
   top: -19px;
   font-size: 31px;
   display: inline-block;
+}
+
+.modal__close-button {
+  transition: stroke 0.4s ease;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.modal__close-button:hover .close-svg__stroke {
+  stroke: var(--dark-blue, #373346);
+}
+
+@media screen and (max-width: 680px) {
+  .modal__close {
+    cursor: pointer;
+    position: absolute;
+    right: -16px;
+    top: -19px;
+    font-size: 31px;
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .modal__title {
+    font-size: 17px;
+    height: 37px;
+  }
 }
