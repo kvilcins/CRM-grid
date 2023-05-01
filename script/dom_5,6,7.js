@@ -5,6 +5,10 @@
   const popupForm = document.querySelector('.modal-wrap');
   const delBtn = document.querySelector('.tbody-td_delete');
   const list = document.querySelector('.table__tbody');
+  const popupFormAmount = document.getElementById('amount');
+  const popupFormPrice = document.getElementById('price');
+  const popupFormDiscount = document.getElementById('discount-field');
+  const popupFormTotal = document.querySelector('.total__span-number');
 
   const data = [
     {
@@ -44,6 +48,17 @@
       total: '$500',
     },
   ];
+
+  for (let e of document.querySelectorAll('input:not(.total__span-number)')) {
+    const oneItemTotalPrice = () => {
+      let discount = (popupFormPrice.value * popupFormAmount.value) * (popupFormDiscount.value / 100);
+      let result = (popupFormPrice.value * popupFormAmount.value) - discount;
+
+      popupFormTotal.textContent = result;
+    };
+
+    e.addEventListener('input', oneItemTotalPrice);
+  };
 
   const modalControl = (delBtn, popupForm) => {
     const openModal = () => {
@@ -180,7 +195,6 @@
     tr.append(tdID, tdName, tdCategory, tdUnits, tdAmount, tdPrice, tdTotal, tdImg, tdEdit, tdDelete);
 
     return tr;
-
   };
 
   const renderItems = (elem, data) => {
