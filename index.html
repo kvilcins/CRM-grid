@@ -11,7 +11,7 @@
   <script defer src="script/script.js"></script>
 <!--  <script defer src="script/dom_2.js"></script>-->
 <!--  <script defer src="script/dom_3.js"></script>-->
-  <script defer src="script/dom_5,6.js"></script>
+  <script defer src="script/dom_5,6,7.js"></script>
   <script defer src="script/inner-fieldset.js"></script>
 </head>
 <body>
@@ -29,12 +29,12 @@
               </svg>
             </button>
           </div>
-          <form action="https://jsonplaceholder.typicode.com/posts" method="POST" class="modal__form form">
+          <form action="" method="POST" class="modal__form form"> <!-- https://jsonplaceholder.typicode.com/posts -->
 
             <fieldset class="form__fieldset fieldset">
               <label class="fieldset__label fieldset__grid-name">
                 <span class="fieldset__span">Наименование</span>
-                <input type="text" name="name" required id="name" class="fieldset__input" value="Брюки бежевые">
+                <input type="text" name="name" required id="name" class="fieldset__input" value="">
               </label>
 
               <label class="fieldset__label fieldset__grid-category">
@@ -65,12 +65,12 @@
 
               <label class="fieldset__label fieldset__grid-amount">
                 <span class="fieldset__span">Количество</span>
-                <input type="number" name="amount" id="amount" class="fieldset__input" value="2">
+                <input type="number" name="amount" id="amount" class="fieldset__input" value="">
               </label>
 
               <label class="fieldset__label fieldset__grid-price">
                 <span class="fieldset__span">Цена</span>
-                <input type="number" min="1" step="any" name="price" required id="price" class="fieldset__input" value="800">
+                <input type="number" min="1" step="any" name="price" required id="price" class="fieldset__input" value="">
               </label>
 
               <label class="fieldset__label fieldset__grid-file">
