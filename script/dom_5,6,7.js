@@ -115,7 +115,7 @@
   //   }
   // });
 
-  const createRow = ({itemInfo: id, name, category, units, amount, price, total, img, edit, deleteItem}) => {
+  const createRow = ({id, name, category, units, amount, price, total, img, edit, deleteItem}) => {
     const tr = document.createElement('tr');
     tr.classList.add('tbody-wrap__tr', 'tbody-tr');
 
@@ -144,7 +144,12 @@
     tdPrice.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right');
 
     const tdTotal = document.createElement('td');
-    tdTotal.textContent = total;
+    if (popupFormTotal.textContent === '0') {
+      tdTotal.textContent = total;
+    } else {
+      tdTotal.textContent = popupFormTotal.textContent;
+    }
+
     tdTotal.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right', 'tbody-td_padding');
 
     const tdImg = document.createElement('td');
@@ -221,7 +226,7 @@
       addItemPage(newItem, list);
       addItemData(newItem);
 
-      popupForm.classList.remove('modal-wrap__visible');
+      e.target.reset();
       closeModal();
     })
   };
