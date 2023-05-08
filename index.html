@@ -44,13 +44,13 @@
 
               <label class="fieldset__label fieldset__grid-measuring">
                 <span class="fieldset__span">Единицы измерения</span>
-                <input type="text" name="units" class="fieldset__input">
+                <input type="text" name="units" required class="fieldset__input">
               </label>
 
               <fieldset class="fieldset__inner-fieldset fieldset__inner-fieldset_row fieldset__inner-fieldset_no-border fieldset__inner-fieldset_width inner-fieldset">
                 <legend class="inner-fieldset__legend">Дисконт</legend>
                 <label class="inner-fieldset__label">
-                  <input id="discount" type="checkbox" name="discount" value="" required="" class="inner-fieldset__checkbox">
+                  <input id="discount" type="checkbox" name="discount" value="" class="inner-fieldset__checkbox">
                 </label>
 
                 <label for="discount-field" class="inner-fieldset__label inner-fieldset__label_width">
@@ -65,7 +65,7 @@
 
               <label class="fieldset__label fieldset__grid-amount">
                 <span class="fieldset__span">Количество</span>
-                <input type="number" name="amount" id="amount" class="fieldset__input" value="">
+                <input type="number" name="amount" id="amount" required class="fieldset__input" value="">
               </label>
 
               <label class="fieldset__label fieldset__grid-price">
