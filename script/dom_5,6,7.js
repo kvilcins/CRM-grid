@@ -17,8 +17,8 @@
       category: 'Техника для дома',
       units: 'шт',
       amount: '5',
-      price: '$100',
-      total: '$500',
+      price: '100',
+      total: '500',
     },
     {
       id: '937295527',
@@ -26,8 +26,8 @@
       category: 'Настольные игры',
       units: 'шт',
       amount: '12',
-      price: '$14',
-      total: '$168',
+      price: '14',
+      total: '168',
     },
     {
       id: '246016548',
@@ -35,8 +35,8 @@
       category: 'Техника для дома',
       units: 'шт',
       amount: '5',
-      price: '$100',
-      total: '$500',
+      price: '100',
+      total: '500',
     },
     {
       id: '246016548',
@@ -44,8 +44,44 @@
       category: 'Техника для дома',
       units: 'шт',
       amount: '5',
-      price: '$100',
-      total: '$500',
+      price: '100',
+      total: '500',
+    },
+    {
+      id: '246016548',
+      name: 'Навигационная система Soundmax',
+      category: 'Техника для дома',
+      units: 'шт',
+      amount: '5',
+      price: '100',
+      total: '500',
+    },
+    {
+      id: '937295527',
+      name: 'Настольная игра “На 4-х ногах”',
+      category: 'Настольные игры',
+      units: 'шт',
+      amount: '12',
+      price: '14',
+      total: '168',
+    },
+    {
+      id: '246016548',
+      name: 'Навигационная система Soundmax',
+      category: 'Техника для дома',
+      units: 'шт',
+      amount: '5',
+      price: '100',
+      total: '500',
+    },
+    {
+      id: '246016548',
+      name: 'Навигационная система Soundmax',
+      category: 'Техника для дома',
+      units: 'шт',
+      amount: '5',
+      price: '100',
+      total: '500',
     },
   ];
 
@@ -90,30 +126,8 @@
         if (e.target.closest('.tbody-td_delete')) {
           e.target.closest('.tbody-tr').remove();
         }
-      });
+    });
   };
-
-
-
-
-
-  // addItem.addEventListener('click', () => {
-  //   popupForm.classList.add('modal-wrap__visible');
-  // });
-  //
-  // popupForm.addEventListener('click', e => {
-  //   const target = e.target;
-  //
-  //   if (target === popupForm || target.closest('.close-svg')) {
-  //     popupForm.classList.remove('modal-wrap__visible');
-  //   } // метод делегирования
-  // });
-  //
-  // list.addEventListener('click', e => {
-  //   if (e.target.closest('.tbody-td_delete')) {
-  //     e.target.closest('.tbody-tr').remove();
-  //   }
-  // });
 
   const createRow = ({id, name, category, units, amount, price, total, img, edit, deleteItem}) => {
     const tr = document.createElement('tr');
@@ -122,6 +136,7 @@
     const tdID = document.createElement('td');
     tdID.textContent = id;
     tdID.classList.add('tbody-tr__td', 'tbody-td');
+    tdID.setAttribute('contenteditable', true);
 
     const tdName = document.createElement('td');
     tdName.textContent = name;
@@ -140,17 +155,17 @@
     tdAmount.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_center');
 
     const tdPrice = document.createElement('td');
-    tdPrice.textContent = price;
+    tdPrice.textContent = `$${price}`;
     tdPrice.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right');
 
     const tdTotal = document.createElement('td');
     if (popupFormTotal.textContent === '0') {
-      tdTotal.textContent = total;
+      tdTotal.textContent = `$${total}`;
     } else {
-      tdTotal.textContent = popupFormTotal.textContent;
+      tdTotal.textContent = `$${popupFormTotal.textContent}`;
     }
 
-    tdTotal.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right', 'tbody-td_padding');
+    tdTotal.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right', 'tbody-td_padding', 'tbody-td_total');
 
     const tdImg = document.createElement('td');
     tdImg.textContent = img;
@@ -231,9 +246,39 @@
     })
   };
 
+  const calcTotalCrmPrice = () => {
+    const crmTotalPrice = document.querySelector('.crm-total__span');
+    const itemTotalArray = [...document.querySelectorAll('.tbody-td_total')];
+    const allBtnsDel = [...document.querySelectorAll('.tbody-td_delete')];
+    let totalCrmPrice = 0;
+    let newArr = [];
+
+    itemTotalArray.forEach(element => {
+      newArr.push(element.innerHTML.slice(1));
+    });
+
+    let numberArray = [];
+
+    for (let i = 0; i < newArr.length; i++) {
+      numberArray.push(parseInt(newArr[i]));
+      totalCrmPrice += numberArray[i];
+    };
+
+    crmTotalPrice.textContent = `$${totalCrmPrice}`;
+    popupForm.addEventListener('submit', calcTotalCrmPrice);
+
+    for (let i = 0; i < allBtnsDel.length; i++) {
+      allBtnsDel[i].addEventListener('click', calcTotalCrmPrice);
+    };
+
+    console.log(totalCrmPrice);
+  };
+
+
 
   const allRow = renderItems(list, data);
   const {closeModal} = modalControl(delBtn, popupForm);
   deleteControl(delBtn, list);
   formControl(popupForm, list, closeModal);
+  calcTotalCrmPrice();
 }
