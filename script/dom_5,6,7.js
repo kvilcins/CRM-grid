@@ -121,14 +121,6 @@
     };
   };
 
-  const deleteControl = (delBtn, list) => {
-    list.addEventListener('click', e => {
-        if (e.target.closest('.tbody-td_delete')) {
-          e.target.closest('.tbody-tr').remove();
-        }
-    });
-  };
-
   const createRow = ({id, name, category, units, amount, price, total, img, edit, deleteItem}) => {
     const tr = document.createElement('tr');
     tr.classList.add('tbody-wrap__tr', 'tbody-tr');
@@ -249,7 +241,6 @@
   const calcTotalCrmPrice = () => {
     const crmTotalPrice = document.querySelector('.crm-total__span');
     const itemTotalArray = [...document.querySelectorAll('.tbody-td_total')];
-    const allBtnsDel = [...document.querySelectorAll('.tbody-td_delete')];
     let totalCrmPrice = 0;
     let newArr = [];
 
@@ -266,15 +257,16 @@
 
     crmTotalPrice.textContent = `$${totalCrmPrice}`;
     popupForm.addEventListener('submit', calcTotalCrmPrice);
-
-    for (let i = 0; i < allBtnsDel.length; i++) {
-      allBtnsDel[i].addEventListener('click', calcTotalCrmPrice);
-    };
-
-    console.log(totalCrmPrice);
   };
 
-
+  const deleteControl = (delBtn, list) => {
+    list.addEventListener('click', e => {
+      if (e.target.closest('.tbody-td_delete')) {
+        e.target.closest('.tbody-tr').remove();
+        calcTotalCrmPrice();
+      }
+    });
+  };
 
   const allRow = renderItems(list, data);
   const {closeModal} = modalControl(delBtn, popupForm);
