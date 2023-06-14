@@ -55,6 +55,18 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
       </svg>
     `);
 
+  buttonImg.setAttribute('data-pic', 'https://sun9-61.userapi.com/impg/y9kf2x_5d8741s_9wSmvPny43JGlpYqMTc19Hg/b03gpnZ-qIE.jpg?size=600x600&quality=96&sign=6ccbbf198fd2b78739da2c085d965f8a&type=album');
+
+  buttonImg.addEventListener('click', () => {
+    const picUrl = buttonImg.getAttribute('data-pic');
+    const windowWidth = 600;
+    const windowHeight = 600;
+    const windowTop = (screen.height / 2) - (windowHeight / 2);
+    const windowLeft = (screen.width / 2) - (windowWidth / 2);
+
+    window.open(picUrl, '_blank', `width=${windowWidth},height=${windowHeight},top=${windowTop},left=${windowLeft}`);
+  });
+
   const tdEdit = document.createElement('td');
   tdEdit.textContent = edit;
   tdEdit.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_edit');
