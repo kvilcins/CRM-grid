@@ -1,7 +1,8 @@
 import {toggleCheckbox, modalControl, formControl, calcTotalCrmPrice} from './modal.js';
 import {addItem, popupForm, delBtn, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
+import {fetchGoods, renderItems, addItemData, addItemPage} from './render.js';
 
-const createRow = ({id, name, category, units, amount, price, total, img, edit, deleteItem}) => {
+const createRow = ({id, title, price, description, category, discount, count, units, image, edit, deleteItem}) => {
   const tr = document.createElement('tr');
   tr.classList.add('tbody-wrap__tr', 'tbody-tr');
 
@@ -11,7 +12,7 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
   tdID.setAttribute('contenteditable', true);
 
   const tdName = document.createElement('td');
-  tdName.textContent = name;
+  tdName.textContent = title;
   tdName.classList.add('tbody-tr__td', 'tbody-td');
 
   const tdCategory = document.createElement('td');
@@ -23,7 +24,7 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
   tdUnits.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_color', 'tbody-td_center');
 
   const tdAmount = document.createElement('td');
-  tdAmount.textContent = amount;
+  tdAmount.textContent = count;
   tdAmount.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_center');
 
   const tdPrice = document.createElement('td');
@@ -31,16 +32,18 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
   tdPrice.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right');
 
   const tdTotal = document.createElement('td');
-  if (popupFormTotal.textContent === '0') {
-    tdTotal.textContent = `$${total}`;
+  if (discount === 0) {
+    const totalWithoutDiscount = count * price;
+    tdTotal.textContent = `$${totalWithoutDiscount}`;
   } else {
-    tdTotal.textContent = `$${popupFormTotal.textContent}`;
+    const totalWithDiscount = count * price * (1 - discount / 100);
+    tdTotal.textContent = `$${totalWithDiscount.toFixed(2)}`;
   }
 
   tdTotal.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right', 'tbody-td_padding', 'tbody-td_total');
 
   const tdImg = document.createElement('td');
-  tdImg.textContent = img;
+  // tdImg.textContent = image;
   tdImg.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_image');
 
   const buttonImg = document.createElement('button');
@@ -55,17 +58,27 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
       </svg>
     `);
 
-  buttonImg.setAttribute('data-pic', 'https://sun9-61.userapi.com/impg/y9kf2x_5d8741s_9wSmvPny43JGlpYqMTc19Hg/b03gpnZ-qIE.jpg?size=600x600&quality=96&sign=6ccbbf198fd2b78739da2c085d965f8a&type=album');
+  (async () => {
+    try {
+      const productData = await fetchGoods();
+      if (productData && image) {
+        buttonImg.setAttribute('data-pic', `https://fallacious-gentle-oriole.glitch.me/${image}`);
+      }
 
-  buttonImg.addEventListener('click', () => {
-    const picUrl = buttonImg.getAttribute('data-pic');
-    const windowWidth = 600;
-    const windowHeight = 600;
-    const windowTop = (screen.height / 2) - (windowHeight / 2);
-    const windowLeft = (screen.width / 2) - (windowWidth / 2);
+      buttonImg.addEventListener('click', () => {
+        const picUrl = buttonImg.getAttribute('data-pic');
+        const windowWidth = 600;
+        const windowHeight = 600;
+        const windowTop = (screen.height / 2) - (windowHeight / 2);
+        const windowLeft = (screen.width / 2) - (windowWidth / 2);
 
-    window.open(picUrl, '_blank', `width=${windowWidth},height=${windowHeight},top=${windowTop},left=${windowLeft}`);
-  });
+        window.open(picUrl, '_blank', `width=${windowWidth},height=${windowHeight},top=${windowTop},left=${windowLeft}`);
+      });
+
+    } catch (error) {
+      console.error(error);
+    }
+  })();
 
   const tdEdit = document.createElement('td');
   tdEdit.textContent = edit;
@@ -101,16 +114,41 @@ const createRow = ({id, name, category, units, amount, price, total, img, edit, 
   return tr;
 };
 
+const deleteItemFromServer = async (itemId) => {
+  try {
+    const response = await fetch(`https://fallacious-gentle-oriole.glitch.me/api/goods/${itemId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete item from the server');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const deleteControl = (delBtn, list) => {
-  list.addEventListener('click', e => {
+  list.addEventListener('click', async (e) => {
     if (e.target.closest('.tbody-td_delete')) {
-      e.target.closest('.tbody-tr').remove();
-      calcTotalCrmPrice();
+      const listItem = e.target.closest('.tbody-tr');
+      const itemId = listItem.dataset.id;
+
+      listItem.remove();
+
+      try {
+        await deleteItemFromServer(itemId);
+        calcTotalCrmPrice();
+      } catch (error) {
+        console.error('Error deleting item from the server:', error);
+      }
     }
   });
 };
 
 export {
+  deleteItemFromServer,
   createRow,
   deleteControl,
 };

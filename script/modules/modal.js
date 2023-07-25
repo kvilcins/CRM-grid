@@ -1,4 +1,4 @@
-import {renderItems, addItemData, addItemPage} from './render.js';
+import {fetchGoods, renderItems, addItemData, addItemPage} from './render.js';
 import {addItem, popupForm, delBtn, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
 
 const toggleCheckbox = () => {
@@ -48,7 +48,7 @@ const modalControl = (delBtn, popupForm) => {
 
     if (target === popupForm || target.closest('.close-svg')) {
       popupForm.classList.remove('modal-wrap__visible');
-    } // метод делегирования
+    }
   });
 
   return {
@@ -57,40 +57,33 @@ const modalControl = (delBtn, popupForm) => {
   };
 };
 
-const formControl = (popupForm, list, closeModal) => {
-  popupForm.addEventListener('submit', e => {
+const formControl = async (popupForm, list, closeModal) => {
+  popupForm.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
     const newItem = Object.fromEntries(formData);
-    addItemPage(newItem, list);
-    addItemData(newItem);
+    await addItemPage(newItem, list);
+    await addItemData(newItem);
 
     e.target.reset();
     closeModal();
-  })
+
+    return false;
+  });
 };
 
 const calcTotalCrmPrice = () => {
   const crmTotalPrice = document.querySelector('.crm-total__span');
-  const itemTotalArray = [...document.querySelectorAll('.tbody-td_total')];
-  let totalCrmPrice = 0;
-  let newArr = [];
+  const itemTotalArray = document.querySelectorAll('.tbody-td_total');
 
-  itemTotalArray.forEach(element => {
-    newArr.push(element.innerHTML.slice(1));
-  });
+  let totalCrmPrice = Array.from(itemTotalArray)
+    .reduce((total, element) => total + parseFloat(element.textContent.slice(1)), 0);
 
-  let numberArray = [];
-
-  for (let i = 0; i < newArr.length; i++) {
-    numberArray.push(parseInt(newArr[i]));
-    totalCrmPrice += numberArray[i];
-  };
-
-  crmTotalPrice.textContent = `$${totalCrmPrice}`;
-  popupForm.addEventListener('submit', calcTotalCrmPrice);
+  crmTotalPrice.textContent = `$${totalCrmPrice.toFixed(2)}`;
 };
+
+popupForm.addEventListener('submit', calcTotalCrmPrice);
 
 export {
   toggleCheckbox,
