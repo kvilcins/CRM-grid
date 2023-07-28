@@ -1,6 +1,6 @@
-import {toggleCheckbox, modalControl, formControl, calcTotalCrmPrice} from './modal.js';
-import {addItem, popupForm, delBtn, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
-import {fetchGoods, renderItems, addItemData, addItemPage} from './render.js';
+import {calcTotalCrmPrice} from './modal.js';
+import {button} from './indentificators.js';
+import {fetchGoods} from './render.js';
 
 const createRow = ({id, title, price, description, category, discount, count, units, image, edit, deleteItem}) => {
   const tr = document.createElement('tr');
@@ -43,7 +43,6 @@ const createRow = ({id, title, price, description, category, discount, count, un
   tdTotal.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_right', 'tbody-td_padding', 'tbody-td_total');
 
   const tdImg = document.createElement('td');
-  // tdImg.textContent = image;
   tdImg.classList.add('tbody-tr__td', 'tbody-td', 'tbody-td_image');
 
   const buttonImg = document.createElement('button');
@@ -124,7 +123,7 @@ const deleteItemFromServer = async (itemId) => {
       throw new Error('Failed to delete item from the server');
     }
   } catch (error) {
-    console.error(error);
+    console.error('Error deleting item from the server:', error);
     throw error;
   }
 };
@@ -135,10 +134,9 @@ const deleteControl = (delBtn, list) => {
       const listItem = e.target.closest('.tbody-tr');
       const itemId = listItem.dataset.id;
 
-      listItem.remove();
-
       try {
         await deleteItemFromServer(itemId);
+        listItem.remove();
         calcTotalCrmPrice();
       } catch (error) {
         console.error('Error deleting item from the server:', error);

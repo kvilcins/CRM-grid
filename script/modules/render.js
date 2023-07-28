@@ -1,5 +1,5 @@
-import {deleteItemFromServer, createRow, deleteControl} from './elementsControl.js';
-import {addItem, popupForm, delBtn, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
+import {createRow} from './elementsControl.js';
+import {displayErrorMessage} from './modal.js';
 
 const fetchGoods = async () => {
   try {
@@ -13,29 +13,6 @@ const fetchGoods = async () => {
     console.error(error);
     return [];
   }
-};
-
-const renderItems = async (elem) => {
-  const data = await fetchGoods();
-  const allRow = data.map(item => {
-    const row = createRow(item);
-    row.dataset.id = item.id;
-    return row;
-  });
-
-  elem.append(...allRow);
-  return allRow;
-};
-
-const displayErrorMessage = (message) => {
-  const errorMessageDiv = document.querySelector('.error-message');
-  errorMessageDiv.textContent = message;
-  errorMessageDiv.style.display = 'block';
-};
-
-const hideErrorMessage = () => {
-  const errorMessageDiv = document.querySelector('.error-message');
-  errorMessageDiv.style.display = 'none';
 };
 
 const addItemData = async (item) => {
@@ -71,19 +48,59 @@ const addItemData = async (item) => {
   }
 };
 
-const addItemPage = async (item, list) => {
+// const addItemPage = async (item, list) => {
+//   try {
+//     const newItem = await addItemData(item);
+//
+//     await renderItems(list);
+//
+//     hideErrorMessage();
+//     calcTotalCrmPrice();
+//   } catch (error) {
+//     console.error('Failed to add item to the page:', error);
+//   }
+// };
+
+const clearTable = (table) => {
+  while (table.firstChild) {
+    table.removeChild(table.firstChild);
+  }
+};
+
+
+const renderItems = async (elem) => {
   try {
-    await addItemData(item);
-    hideErrorMessage();
-    list.append(createRow(item));
+    const data = await fetchGoods();
+
+    const existingIds = new Set();
+    const newData = data.filter((item) => {
+      if (existingIds.has(item.id)) {
+        return false;
+      } else {
+        existingIds.add(item.id);
+        return true;
+      }
+    });
+
+    clearTable(elem);
+
+    const allRow = newData.map(item => {
+      const row = createRow(item);
+      row.dataset.id = item.id;
+      return row;
+    });
+
+    elem.append(...allRow);
+    return allRow;
   } catch (error) {
-    console.error('Failed to add item to the page:', error);
+    console.error(error);
+    return [];
   }
 };
 
 export {
   fetchGoods,
-  renderItems,
   addItemData,
-  addItemPage,
+  clearTable,
+  renderItems,
 };

@@ -1,5 +1,5 @@
-import {fetchGoods, renderItems, addItemData, addItemPage} from './render.js';
-import {addItem, popupForm, delBtn, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
+import {addItemData, renderItems} from './render.js';
+import {addItem, list, popupFormAmount, popupFormPrice, popupFormDiscount, popupFormTotal, button, colorArray, checkbox} from './indentificators.js';
 
 const toggleCheckbox = () => {
   const cleanInput = () => {
@@ -32,7 +32,7 @@ const toggleCheckbox = () => {
   }
 };
 
-const modalControl = (delBtn, popupForm) => {
+const modalControl = (delBtn, popupForm, init) => {
   const openModal = () => {
     popupForm.classList.add('modal-wrap__visible');
   };
@@ -51,27 +51,68 @@ const modalControl = (delBtn, popupForm) => {
     }
   });
 
+  const closeAndInit = (e) => {
+    e.target.reset();
+    closeModal();
+    init();
+  };
+
+  popupForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const newItem = Object.fromEntries(formData);
+
+    try {
+      await addItemData(newItem);
+      closeModal();
+
+      await renderItems(list);
+      calcTotalCrmPrice();
+    } catch (error) {
+      console.error('Failed to add item:', error);
+      displayErrorMessage('Failed to add item. Please try again.');
+    }
+  });
+
   return {
     closeModal,
     openModal,
   };
 };
 
-const formControl = async (popupForm, list, closeModal) => {
-  popupForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
+const displayErrorMessage = (message) => {
+  const errorMessageDiv = document.querySelector('.error-message');
+  errorMessageDiv.querySelector('.error-message__content').textContent = message;
+  errorMessageDiv.classList.add('show');
 
-    const newItem = Object.fromEntries(formData);
-    await addItemPage(newItem, list);
-    await addItemData(newItem);
+  const closeErrorMessage = () => {
+    errorMessageDiv.classList.remove('show');
+    errorMessageDiv.querySelector('.error-message__close-button').removeEventListener('click', closeErrorMessage);
+    document.removeEventListener('click', outsideClickHandler);
+  };
 
-    e.target.reset();
-    closeModal();
+  errorMessageDiv.querySelector('.error-message__close-button').addEventListener('click', closeErrorMessage);
 
-    return false;
-  });
+  const outsideClickHandler = (e) => {
+    if (!errorMessageDiv.contains(e.target)) {
+      closeErrorMessage();
+    }
+  };
+
+  document.addEventListener('click', outsideClickHandler);
+
+  return {
+    closeErrorMessage,
+    outsideClickHandler,
+  };
 };
+
+const hideErrorMessage = () => {
+  const errorMessageDiv = document.querySelector('.error-message');
+  errorMessageDiv.classList.remove('show');
+  errorMessageDiv.querySelector('.error-message__close-button').removeEventListener('click', hideErrorMessage);
+};
+
 
 const calcTotalCrmPrice = () => {
   const crmTotalPrice = document.querySelector('.crm-total__span');
@@ -83,11 +124,10 @@ const calcTotalCrmPrice = () => {
   crmTotalPrice.textContent = `$${totalCrmPrice.toFixed(2)}`;
 };
 
-popupForm.addEventListener('submit', calcTotalCrmPrice);
-
 export {
   toggleCheckbox,
   modalControl,
-  formControl,
+  displayErrorMessage,
+  hideErrorMessage,
   calcTotalCrmPrice,
 };
