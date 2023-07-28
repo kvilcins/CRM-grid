@@ -1,5 +1,4 @@
 import {createRow} from './elementsControl.js';
-import {displayErrorMessage} from './modal.js';
 
 const fetchGoods = async () => {
   try {
@@ -26,16 +25,11 @@ const addItemData = async (item) => {
     });
 
     if (!response.ok) {
-      const errorMessage = await response.text();
-
-      try {
-        const parsedError = JSON.parse(errorMessage);
-        displayErrorMessage(parsedError.message || 'Что-то пошло не так...');
-      } catch (error) {
-        displayErrorMessage('Что-то пошло не так...');
-      }
-
-      throw new Error(`Failed to add item to the server. Server responded with status ${response.status}. Error message: ${errorMessage}`);
+      const errorMessage = await response.json();
+      throw {
+        statusCode: response.status,
+        message: errorMessage.errors[0].message,
+      };
     }
 
     const data = await response.json();
@@ -48,25 +42,11 @@ const addItemData = async (item) => {
   }
 };
 
-// const addItemPage = async (item, list) => {
-//   try {
-//     const newItem = await addItemData(item);
-//
-//     await renderItems(list);
-//
-//     hideErrorMessage();
-//     calcTotalCrmPrice();
-//   } catch (error) {
-//     console.error('Failed to add item to the page:', error);
-//   }
-// };
-
 const clearTable = (table) => {
   while (table.firstChild) {
     table.removeChild(table.firstChild);
   }
 };
-
 
 const renderItems = async (elem) => {
   try {

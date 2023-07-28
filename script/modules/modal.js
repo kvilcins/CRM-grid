@@ -51,12 +51,6 @@ const modalControl = (delBtn, popupForm, init) => {
     }
   });
 
-  const closeAndInit = (e) => {
-    e.target.reset();
-    closeModal();
-    init();
-  };
-
   popupForm.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -69,8 +63,8 @@ const modalControl = (delBtn, popupForm, init) => {
       await renderItems(list);
       calcTotalCrmPrice();
     } catch (error) {
-      console.error('Failed to add item:', error);
-      displayErrorMessage('Failed to add item. Please try again.');
+      let errorMessage = `Error: Failed to add item to the server, Server responded with status ${error.statusCode}. Error message: ${error.message}. Please try again.`;
+      displayErrorMessage(errorMessage);
     }
   });
 
@@ -80,10 +74,14 @@ const modalControl = (delBtn, popupForm, init) => {
   };
 };
 
-const displayErrorMessage = (message) => {
+const displayErrorMessage = (message, error) => {
   const errorMessageDiv = document.querySelector('.error-message');
   errorMessageDiv.querySelector('.error-message__content').textContent = message;
   errorMessageDiv.classList.add('show');
+
+  if (error) {
+    console.error(error);
+  }
 
   const closeErrorMessage = () => {
     errorMessageDiv.classList.remove('show');
