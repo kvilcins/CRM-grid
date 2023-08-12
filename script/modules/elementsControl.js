@@ -1,5 +1,4 @@
-import {calcTotalCrmPrice} from './modal.js';
-import {button} from './indentificators.js';
+import {calcTotalCrmPrice, modalControl} from './modal.js';
 import {fetchGoods} from './render.js';
 
 const createRow = ({id, title, price, description, category, discount, count, units, image, edit, deleteItem}) => {
@@ -85,6 +84,7 @@ const createRow = ({id, title, price, description, category, discount, count, un
 
   const buttonEdit = document.createElement('button');
   buttonEdit.classList.add('tbody-td__button');
+  buttonEdit.setAttribute('data-id', id);
   tdEdit.append(buttonEdit);
 
   buttonEdit.insertAdjacentHTML('beforeend', `

@@ -6,8 +6,8 @@ const fetchGoods = async () => {
     if (!response.ok) {
       throw new Error('Failed to fetch goods from the server');
     }
-    const data = await response.json();
-    return data;
+
+    return await response.json();
   } catch (error) {
     console.error(error);
     return [];
