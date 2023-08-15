@@ -186,7 +186,7 @@ const createModal = () => {
   // File
   const fileLabel = document.createElement("label");
   fileLabel.classList.add("fieldset__label", "fieldset__grid-file");
-  fileLabel.textContent = 'Добавить изображение';
+  fileLabel.textContent = "Добавить изображение";
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.accept = "image/png, image/gif, image/jpeg";
@@ -194,6 +194,17 @@ const createModal = () => {
   fileInput.id = "file";
   fileInput.classList.add("fieldset__input-file");
   fileLabel.appendChild(fileInput);
+
+// Добавляем элемент превью изображения
+  const imagePreview = document.createElement("div");
+  imagePreview.classList.add("image-preview");
+  imagePreview.style.display = "none";
+  imagePreview.style.width = "200px";
+  imagePreview.style.height = "200px";
+  imagePreview.style.margin = "0 auto";
+  imagePreview.style.textAlign = "center";
+  imagePreview.style.backgroundSize = "cover";
+  imagePreview.style.backgroundPosition = "center";
 
   fieldset.appendChild(nameLabel);
   fieldset.appendChild(categoryLabel);
@@ -204,7 +215,7 @@ const createModal = () => {
   fieldset.appendChild(priceLabel);
   fieldset.appendChild(fileLabel);
 
-  // Total
+// Total
   const totalDiv = document.createElement("div");
   totalDiv.classList.add("form__total", "total");
   const totalPrice = document.createElement("p");
@@ -219,6 +230,7 @@ const createModal = () => {
   totalDiv.appendChild(totalButton);
 
   form.appendChild(fieldset);
+  form.appendChild(imagePreview);
   form.appendChild(totalDiv);
 
   modalSection.appendChild(modalTitle);
@@ -243,6 +255,7 @@ const createModal = () => {
     unitsInput,
     descriptionTextarea,
     fileInput,
+    imagePreview,
   };
 };
 
@@ -261,34 +274,81 @@ const openModalWithStyles = async () => {
   }
 };
 
-const { popupForm, discountInput, discountFieldInput, amountInput, priceInput, totalPrice, nameInput, categoryInput, unitsInput, descriptionTextarea, fileInput } = createModal();
+const { popupForm, discountInput, discountFieldInput, amountInput, priceInput, totalPrice, nameInput, categoryInput, unitsInput, descriptionTextarea, fileInput, imagePreview } = createModal();
+
+const updateFormState = () => {
+  if (discountInput.checked) {
+    discountFieldInput.removeAttribute("disabled");
+    discountFieldInput.style.backgroundColor = "#F4F2FF";
+    discountFieldInput.setAttribute("required", "");
+  } else {
+    discountFieldInput.setAttribute("disabled", "");
+    discountFieldInput.style.backgroundColor = "#E5E5E5";
+    discountFieldInput.removeAttribute("required");
+    discountFieldInput.value = ""; // Reset the value
+  }
+};
 
 const toggleCheckbox = () => {
   discountInput.addEventListener("change", () => {
-    if (discountInput.checked) {
-      discountFieldInput.removeAttribute("disabled");
-      discountFieldInput.style.backgroundColor = "#F4F2FF";
-      discountFieldInput.setAttribute("required", "");
-    } else {
-      discountFieldInput.setAttribute("disabled", "");
-      discountFieldInput.style.backgroundColor = "#E5E5E5";
-      discountFieldInput.removeAttribute("required");
-      discountFieldInput.value = ""; // Reset the value
-    }
+    updateFormState();
     calculateTotalPrice();
   });
 
-  const calculateTotalPrice = () => {
-    let discountValue = discountInput.checked ? (priceInput.value * amountInput.value) * (discountFieldInput.value / 100) : 0;
-    let result = (priceInput.value * amountInput.value) - discountValue;
-    totalPrice.querySelector(".total__span-number").textContent = result;
-  };
+  fileInput.addEventListener("change", () => {
+    const selectedFile = fileInput.files[0];
 
-  discountFieldInput.addEventListener("input", calculateTotalPrice);
+    if (selectedFile) {
+      imagePreview.style.display = "block";
+      if (selectedFile.size > 1024 * 1024) {
+        imagePreview.textContent = "Изображение не должно превышать размер 1 МБ";
+        imagePreview.style.height = "auto";
+        imagePreview.style.color = "red";
+        imagePreview.style.background = "none";
+        fileInput.value = "";
+      } else {
+        imagePreview.style.color = "";
+        imagePreview.style.background = `url(${URL.createObjectURL(selectedFile)}) center/contain no-repeat`;
+        imagePreview.textContent = "";
+        imagePreview.style.height = "200px";
+      }
+    } else {
+      // Скрываем превью, если файл не выбран
+      imagePreview.style.display = "none";
+      imagePreview.style.color = "";
+      imagePreview.style.background = "none";
+      fileInput.value = "";
+    }
+  });
+};
 
-  for (let input of popupForm.querySelectorAll("input:not(.total__span-number)")) {
-    input.addEventListener("input", calculateTotalPrice);
-  }
+const calculateTotalPrice = () => {
+  let discountValue = discountInput.checked ? (priceInput.value * amountInput.value) * (Number(discountFieldInput.value) / 100) : 0;
+  let result = (priceInput.value * amountInput.value) - discountValue;
+  totalPrice.querySelector(".total__span-number").textContent = result;
+};
+
+discountFieldInput.addEventListener("input", calculateTotalPrice);
+
+for (let input of popupForm.querySelectorAll("input:not(.total__span-number)")) {
+  input.addEventListener("input", calculateTotalPrice);
+}
+
+const clearForm = () => {
+  nameInput.value = '';
+  categoryInput.value = '';
+  unitsInput.value = '';
+  discountInput.checked = false;
+  discountFieldInput.value = '';
+  discountFieldInput.disabled = true;
+  descriptionTextarea.value = '';
+  amountInput.value = '';
+  priceInput.value = '';
+  imagePreview.style.display = "none";
+  imagePreview.style.backgroundImage = "none";
+  imagePreview.textContent = "";
+
+  calculateTotalPrice();
 };
 
 const modalControl = () => {
@@ -304,76 +364,58 @@ const modalControl = () => {
 
   const edit = document.querySelectorAll('.edit-icon');
 
-  edit.forEach(edit => {
-    edit.addEventListener('click', async (event) => {
-      const editButton = event.target;
-
-      const tableRow = editButton.closest('tr');
-
-      const id = tableRow.dataset.id;
-
-      try {
-        const response = await fetch(`https://fallacious-gentle-oriole.glitch.me/api/goods/${id}`);
-        if (response.ok) {
-          const item = await response.json();
-
-          nameInput.value = item.title;
-          categoryInput.value = item.category;
-          unitsInput.value = item.units;
-          discountInput.value = item.discount;
-          discountFieldInput.value = item.discount;
-          descriptionTextarea.value = item.description;
-          amountInput.value = item.count;
-          priceInput.value = item.price;
-
-          if (item.discount !== 0) {
-            discountInput.checked = true;
-            discountFieldInput.removeAttribute("disabled");
-            discountFieldInput.style.backgroundColor = "#F4F2FF";
-            discountFieldInput.setAttribute("required", "");
-          }
-
-          openModalWithStyles();
-        } else {
-          console.error('Failed to fetch item details:', response.status);
-        }
-      } catch (error) {
-        console.error('An error occurred:', error);
-      }
-    });
-  });
-
-  popupForm.addEventListener('click', e => {
-    const target = e.target;
-
-    if (target === popupForm || target.closest('.close-svg')) {
-      popupForm.classList.remove('modal-wrap__visible');
-
-      nameInput.value = '';
-      categoryInput.value = '';
-      unitsInput.value = '';
-      discountInput.checked = false;
-      discountFieldInput.value = '';
-      descriptionTextarea.value = '';
-      amountInput.value = '';
-      priceInput.value = '';
-    }
-  });
-
-  popupForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const newItem = Object.fromEntries(formData);
+  const handleEditClick = async (event) => {
+    const editButton = event.target;
+    const tableRow = editButton.closest('tr');
+    const id = tableRow.dataset.id;
 
     try {
-      await addItemData(newItem);
-      closeModal();
+      const response = await fetch(`https://fallacious-gentle-oriole.glitch.me/api/goods/${id}`);
+      if (response.ok) {
+        const item = await response.json();
 
-      await renderItems(list);
-      calcTotalCrmPrice();
+        nameInput.value = item.title;
+        categoryInput.value = item.category;
+        unitsInput.value = item.units;
+        discountInput.value = item.discount;
+        discountFieldInput.value = item.discount;
+        descriptionTextarea.value = item.description;
+        amountInput.value = item.count;
+        priceInput.value = item.price;
+
+        // Отображаем изображение в превью, если оно есть
+        if (item.image) {
+          imagePreview.style.display = "block";
+          imagePreview.style.backgroundImage = `url(https://fallacious-gentle-oriole.glitch.me/${item.image})`;
+          console.log(item.image);
+        } else {
+          imagePreview.style.display = "none";
+          imagePreview.style.backgroundImage = "none";
+        }
+
+        if (item.discount !== 0) {
+          discountInput.checked = true;
+          discountFieldInput.removeAttribute("disabled");
+          discountFieldInput.style.backgroundColor = "#F4F2FF";
+          discountFieldInput.setAttribute("required", "");
+        }
+
+        openModalWithStyles();
+      } else {
+        console.error('Failed to fetch item details:', response.status);
+      }
     } catch (error) {
-      let errorMessage = `Error: Failed to add item to the server, Server responded with status ${error.statusCode}. Error message: ${error.message}. Please try again.`;
-      displayErrorMessage(errorMessage);
+      console.error('An error occurred:', error);
+    }
+  };
+
+// Добавляем обработчик события для каждой кнопки редактирования
+  edit.forEach(editButton => {
+    // Проверяем, был ли уже добавлен обработчик события
+    if (!editButton.dataset.eventListenerAdded) {
+      editButton.addEventListener('click', handleEditClick);
+      // Отмечаем, что обработчик события был добавлен
+      editButton.dataset.eventListenerAdded = true;
     }
   });
 
@@ -382,6 +424,46 @@ const modalControl = () => {
     openModal,
   };
 };
+
+const { closeModal } = modalControl();
+
+// Создаем обработчики событий для кнопок "Отмена" и "Добавить товар"
+popupForm.addEventListener('click', e => {
+  const target = e.target;
+
+  if (target === popupForm || target.closest('.close-svg')) {
+    popupForm.classList.remove('modal-wrap__visible');
+    clearForm(); // Очищаем форму при закрытии окна
+    updateFormState(); // Обновляем состояние элементов формы, включая изменение цвета
+  }
+});
+
+popupForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const newItem = Object.fromEntries(formData);
+
+  if (newItem.discount === "on") {
+    newItem.discount = discountFieldInput.value;
+    newItem.discount = newItem['discount-field'];
+  } else {
+    newItem.discount = 0;
+  }
+
+  try {
+    await addItemData(newItem);
+    closeModal();
+
+    await renderItems(list);
+    calcTotalCrmPrice();
+
+    clearForm(); // Очищаем форму после успешной отправки
+    updateFormState(); // Обновляем состояние элементов формы, включая изменение цвета
+  } catch (error) {
+    let errorMessage = `Error: Failed to add item to the server, Server responded with status ${error.statusCode}. Error message: ${error.message}. Please try again.`;
+    displayErrorMessage(errorMessage);
+  }
+});
 
 const displayErrorMessage = (message, error) => {
   const errorMessageDiv = document.querySelector('.error-message');
