@@ -195,7 +195,7 @@ const createModal = () => {
   fileInput.classList.add("fieldset__input-file");
   fileLabel.appendChild(fileInput);
 
-// Добавляем элемент превью изображения
+// Image preview
   const imagePreview = document.createElement("div");
   imagePreview.classList.add("image-preview");
   imagePreview.style.display = "none";
@@ -256,6 +256,7 @@ const createModal = () => {
     descriptionTextarea,
     fileInput,
     imagePreview,
+    form,
   };
 };
 
@@ -274,7 +275,7 @@ const openModalWithStyles = async () => {
   }
 };
 
-const { popupForm, discountInput, discountFieldInput, amountInput, priceInput, totalPrice, nameInput, categoryInput, unitsInput, descriptionTextarea, fileInput, imagePreview } = createModal();
+const { popupForm, discountInput, discountFieldInput, amountInput, priceInput, totalPrice, nameInput, categoryInput, unitsInput, descriptionTextarea, fileInput, imagePreview, form } = createModal();
 
 const updateFormState = () => {
   if (discountInput.checked) {
@@ -313,7 +314,6 @@ const toggleCheckbox = () => {
         imagePreview.style.height = "200px";
       }
     } else {
-      // Скрываем превью, если файл не выбран
       imagePreview.style.display = "none";
       imagePreview.style.color = "";
       imagePreview.style.background = "none";
@@ -383,7 +383,6 @@ const modalControl = () => {
         amountInput.value = item.count;
         priceInput.value = item.price;
 
-        // Отображаем изображение в превью, если оно есть
         if (item.image) {
           imagePreview.style.display = "block";
           imagePreview.style.backgroundImage = `url(https://fallacious-gentle-oriole.glitch.me/${item.image})`;
@@ -409,12 +408,9 @@ const modalControl = () => {
     }
   };
 
-// Добавляем обработчик события для каждой кнопки редактирования
   edit.forEach(editButton => {
-    // Проверяем, был ли уже добавлен обработчик события
     if (!editButton.dataset.eventListenerAdded) {
       editButton.addEventListener('click', handleEditClick);
-      // Отмечаем, что обработчик события был добавлен
       editButton.dataset.eventListenerAdded = true;
     }
   });
@@ -427,14 +423,13 @@ const modalControl = () => {
 
 const { closeModal } = modalControl();
 
-// Создаем обработчики событий для кнопок "Отмена" и "Добавить товар"
 popupForm.addEventListener('click', e => {
   const target = e.target;
 
   if (target === popupForm || target.closest('.close-svg')) {
     popupForm.classList.remove('modal-wrap__visible');
-    clearForm(); // Очищаем форму при закрытии окна
-    updateFormState(); // Обновляем состояние элементов формы, включая изменение цвета
+    clearForm();
+    updateFormState();
   }
 });
 
@@ -457,8 +452,8 @@ popupForm.addEventListener('submit', async e => {
     await renderItems(list);
     calcTotalCrmPrice();
 
-    clearForm(); // Очищаем форму после успешной отправки
-    updateFormState(); // Обновляем состояние элементов формы, включая изменение цвета
+    clearForm();
+    updateFormState();
   } catch (error) {
     let errorMessage = `Error: Failed to add item to the server, Server responded with status ${error.statusCode}. Error message: ${error.message}. Please try again.`;
     displayErrorMessage(errorMessage);
@@ -511,6 +506,46 @@ const calcTotalCrmPrice = () => {
 
   crmTotalPrice.textContent = `$${totalCrmPrice.toFixed(2)}`;
 };
+
+const setPattern = (inputElement, pattern, title, minLength) => {
+  inputElement.pattern = pattern;
+  inputElement.title = title;
+  if (minLength) {
+    inputElement.minLength = minLength;
+  }
+};
+
+const checkFormSubmission = (event) => {
+  const inputs = [
+    nameInput,
+    categoryInput,
+    unitsInput,
+    amountInput,
+    priceInput,
+  ];
+
+  for (let i = 0; i < inputs.length; i++) {
+    if (inputs[i].value.trim() === '') {
+      alert('Пожалуйста, заполните все обязательные поля.');
+      event.preventDefault();
+      return;
+    }
+  }
+
+  if (descriptionTextarea.value.length < 80) {
+    alert('Описание должно содержать минимум 80 символов.');
+    event.preventDefault();
+  }
+};
+
+setPattern(nameInput, "[A-Za-z\\s]+", "Введите только латиницу и пробел");
+setPattern(categoryInput, "[A-Za-z\\s]+", "Введите только латиницу и пробел");
+setPattern(unitsInput, "[A-Za-z\\s]+", "Введите только латиницу и пробел");
+setPattern(amountInput, "[0-9]+", "Введите только цифры");
+setPattern(priceInput, "[0-9]+", "Введите только цифры");
+setPattern(descriptionTextarea, ".+", "Введите описание", 80);
+
+form.addEventListener('submit', checkFormSubmission);
 
 export {
   loadStyles,

@@ -10,6 +10,15 @@
   padding: 0 10px 0 10px;
 }
 
+.tfoot-td__select {
+  border: none;
+  background-color: transparent;
+  color: #6E6893;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0; /* Remove default padding */
+}
+
 .tbody-td_center {
   text-align: center;
 }
